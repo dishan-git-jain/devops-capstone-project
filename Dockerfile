@@ -1,17 +1,17 @@
-FROM python:3.9-slim
+[nosetests]
+verbosity=2
+with-spec=1
+spec-color=1
+with-coverage=1
+cover-erase=1
+cover-package=service
 
-# Create working folder and install dependencies
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+[coverage:report]
+show_missing = True
 
-# Copy the application contents
-COPY service/ ./service/
+[flake8]
+per-file-ignores =
+    */__init__.py: F401 E402
 
-# Switch to a non-root user
-RUN useradd --uid 1000 theia && chown -R theia /app
-USER theia
-
-# Run the service
-EXPOSE 8080
-CMD ["gunicorn", "--bind=0.0.0.0:8080", "--log-level=info", "service:app"]
+[pylint.'MESSAGES CONTROL']
+disable=E1101
